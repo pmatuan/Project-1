@@ -1,0 +1,6 @@
+P1: container vs VM
+
+A container is a system that embeds an application and its dependencies. Unlike a VM, a
+container contains only a light operating system with only the elements required for the OS,
+such as system libraries, binaries, and code dependencies.
+
