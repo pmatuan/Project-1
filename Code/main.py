@@ -19,20 +19,15 @@ def login():
         if user_name == "glpat-A4wxGBzLAgBxyYBueyS6":
             session["user"] = "Tuan"
             session.permanent = True
-            return redirect(url_for("hello_user", name=user_name))
-    if "user" in session:
-        name = session["user"]
-        return f"<h1> Hello {name}</h1>"
+            return redirect(url_for("user"))
+        else:
+            flash('Invalid token id. Please try again.', 'error')
     return render_template('login.html')
 
 
 @app.route('/user')
-def hello_user():
-    if "user" in session:
-        name = session["user"]
-        return f"<h1> Hello {name}</h1>"
-    else:
-        return redirect(url_for("login"))
+def user():
+    return render_template('user.html')
 
 
 @app.route('/logout')
