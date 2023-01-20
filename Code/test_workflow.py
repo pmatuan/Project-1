@@ -12,7 +12,8 @@ def main():
     # time.sleep(10)
     # print(workflow_controller.stateOfPipeline())
     # workflow_controller.historyPipeline()
-    print(workflow_controller.getConfig())
+
+    workflow_controller.stateOfPipeline()
 
 
 if __name__ == '__main__':

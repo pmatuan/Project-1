@@ -1,3 +1,5 @@
+import time
+
 from Login import login
 
 
@@ -47,10 +49,11 @@ class RepositoryController:
                 'target_branch': target_branch,
                 'title': f'Merging \'{source_branch}\' into \'{target_branch}\''
             })
+            time.sleep(2)
             # Nếu không thể tự động merge (tồn tại conflict, merge request không thay đổi ...)
             if merge_request.changes()['merge_status'] != 'can_be_merged':
                 print(
-                    f"A merge request for source branch '{source_branch}' and target branch '{target_branch}' cannot be merged")
+                    f"A merge request for source branch '{source_branch}' and target branch '{target_branch}' cannot be merged due to {merge_request.changes()['merge_status']}")
                 merge_request.delete()
                 merge_request = None
         return merge_request

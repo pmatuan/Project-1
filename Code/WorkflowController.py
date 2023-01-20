@@ -1,6 +1,5 @@
 import base64
 
-
 class WorkflowController:
     def __init__(self, repo):
         self.repo = repo
@@ -8,7 +7,11 @@ class WorkflowController:
     # Xem trạng thái workflow mới nhất của repo
     def stateOfPipeline(self):
         pipeline = self.repo.pipelines.list()[0]
-        return pipeline.attributes['status']
+        if pipeline.status == 'failed':
+            for job in pipeline.jobs.list():
+                if job.status == 'failed':
+                    print(f"Job: {job.name} failed")
+                    print(f"Job Web URL: {job.web_url}")
 
     # Lấy file .gitlab-ci.yml
     def getConfig(self):
@@ -17,13 +20,13 @@ class WorkflowController:
         content = content.replace('\\n', '\n')
         return content
 
-    # Sửa file .gi!¡!tlab-ci.yml
+    # Sửa file .gitlab-ci.yml
     def editConfig(self):
         pass
 
-    # Tạo pipeline
+    # Tạo pipeline !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def createPipeline(self):
-        pipeline = self.repo.pipelines.create({'ref': 'main', 'variables': [{'key': 'MY_VARIABLE', 'value': 'hello'}]})
+        pipeline = self.repo.pipelines.create({'ref': 'main'})
         print('Create pipeline successfully')
         return pipeline
 
@@ -31,11 +34,6 @@ class WorkflowController:
     def runPipeline(self, pipeline):
         # ?
         pipeline.play()
-        trace = pipeline.trace()
-        if 'error' in trace.lower():
-            print("Error in pipeline: ", trace)
-        else:
-            print('Run pipeline successfully')
 
     # Hủy pipeline
     def cancelPipeline(self, pipeline):
