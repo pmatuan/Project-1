@@ -27,7 +27,7 @@ def login():
 
 @app.route('/user')
 def user():
-    return render_template('user.html')
+    return render_template('home.html')
 
 
 @app.route('/logout')

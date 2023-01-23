@@ -1,5 +1,4 @@
-import time
-from RepositoryController import RepositoryController
+from Controller.RepositoryController import RepositoryController
 
 
 def main():

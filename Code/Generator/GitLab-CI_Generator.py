@@ -50,7 +50,7 @@ def generate_gitlab_ci_yml():
         "deploy": deploy
     }
     ci_config_ymp = yaml.dump(ci_config)
-    with open(".gitlab-ci.yml", "w") as f:
+    with open("../.gitlab-ci.yml", "w") as f:
         f.write(str(ci_config_ymp))
 
 
