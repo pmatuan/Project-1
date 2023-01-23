@@ -1,17 +1,20 @@
 import base64
 
+
 class WorkflowController:
     def __init__(self, repo):
         self.repo = repo
 
     # Xem trạng thái workflow mới nhất của repo
     def stateOfPipeline(self):
-        pipeline = self.repo.pipelines.list()[0]
-        if pipeline.status == 'failed':
-            for job in pipeline.jobs.list():
-                if job.status == 'failed':
-                    print(f"Job: {job.name} failed")
-                    print(f"Job Web URL: {job.web_url}")
+        pipelines = self.repo.pipelines.all()
+        for pipeline in pipelines[-10:]:
+            if pipeline.status == 'failed':
+                for job in pipeline.jobs.list():
+                    if job.status == 'failed':
+                        print(f'Pipeline {pipeline.id}')
+                        print(f"Job: {job.name} failed")
+                        print(f"Job Web URL: {job.web_url}")
 
     # Lấy file .gitlab-ci.yml
     def getConfig(self):
@@ -21,8 +24,16 @@ class WorkflowController:
         return content
 
     # Sửa file .gitlab-ci.yml
-    def editConfig(self):
-        pass
+    def editConfig(self, new_content):
+        ci_config = self.repo.files.get(file_path='.gitlab-ci.yml', ref='main')
+        encoded_content = base64.b64encode(new_content.encode()).decode()
+        self.repo.files.update(file_path='.gitlab-ci.yml', ref='main', content=encoded_content,
+                               last_commit_sha=ci_config.sha)
+        self.repo.commits.create(ref='main', message='Update .gitlab-ci.yml', actions=[{
+            'action': 'update',
+            'file_path': '.gitlab-ci.yml',
+            'content': encoded_content
+        }])
 
     # Tạo pipeline !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def createPipeline(self):
